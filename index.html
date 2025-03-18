@@ -7,19 +7,19 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #000; /* Fundo preto */
-            color: white; /* Texto branco para contraste */
+            background-color: #000;
+            color: white;
             margin: 0;
             padding: 0;
+            text-align: center;
         }
         .container {
             max-width: 400px;
-            margin: 100px auto;
+            margin: 50px auto;
             padding: 20px;
-            text-align: center;
             border: 1px solid #ccc;
             border-radius: 8px;
-            background-color: #222; /* Fundo escuro para o formulário */
+            background-color: #222;
         }
         input[type="text"] {
             width: 80%;
@@ -27,7 +27,7 @@
             margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
-            background-color: #333; /* Fundo escuro para o campo de texto */
+            background-color: #333;
             color: white;
         }
         button {
@@ -41,6 +41,37 @@
         button:hover {
             background-color: #45a049;
         }
+        .output-container {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #333;
+            border-radius: 8px;
+        }
+        .url-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #444;
+            border-radius: 4px;
+            color: white;
+            font-size: 14px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        #generatedUrl {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: calc(100% - 80px);
+        }
+        .copy-button {
+            background-color: #008CBA;
+            padding: 5px 10px;
+            margin-left: 10px;
+            flex-shrink: 0;
+        }
     </style>
 </head>
 <body>
@@ -53,6 +84,16 @@
         </form>
     </div>
 
+    <div class="container output-container">
+        <h3>Gerar URL</h3>
+        <input type="text" id="customTicketNumber" placeholder="Digite o número do ticket">
+        <br>
+        <div class="url-box">
+            <span id="generatedUrl">Sua URL aparecerá aqui...</span>
+            <button class="copy-button" onclick="copiarUrl()">Copiar</button>
+        </div>
+    </div>
+
     <script>
         function limparCampo() {
             document.getElementById("ticketNumber").value = "";
@@ -60,9 +101,7 @@
 
         document.getElementById("ticketForm").addEventListener("submit", function(event) {
             event.preventDefault();
-
             var ticketNumber = document.getElementById("ticketNumber").value.trim();
-
             if(ticketNumber) {
                 var url = "https://support.sevensuite.com.br/TicketDossier/" + ticketNumber + "/OpenBySequentialId";
                 window.open(url, "_blank");
@@ -70,6 +109,22 @@
                 alert("Por favor, insira um número de ticket válido.");
             }
         });
+
+        document.getElementById("customTicketNumber").addEventListener("input", function() {
+            var ticketNumber = this.value.trim();
+            var url = ticketNumber ? "https://support.sevensuite.com.br/TicketDossier/" + ticketNumber + "/OpenBySequentialId" : "Sua URL aparecerá aqui...";
+            document.getElementById("generatedUrl").textContent = url;
+        });
+
+        function copiarUrl() {
+            var url = document.getElementById("generatedUrl").textContent;
+            if (url !== "Sua URL aparecerá aqui...") {
+                navigator.clipboard.writeText(url);
+                alert("URL copiada!");
+            } else {
+                alert("Nenhuma URL para copiar.");
+            }
+        }
     </script>
 </body>
 </html>
